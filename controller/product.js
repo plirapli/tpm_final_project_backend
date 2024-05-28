@@ -29,7 +29,7 @@ const getProductTotalByCategory = async (req, res) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Successfully retrieved product list",
+      message: "Successfully retrieved total product by category",
       data: data.totalproducts,
     });
   } catch (error) {
@@ -47,8 +47,26 @@ const getProductTotal = async (req, res) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Successfully retrieved product list",
+      message: "Successfully retrieved total product",
       data: data.totalproducts,
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+const getProductTotalPrice = async (req, res) => {
+  try {
+    const command = "SELECT SUM(price) AS totalprice FROM products";
+    const [[data]] = await connection.promise().query(command);
+
+    res.status(200).json({
+      status: "Success",
+      message: "Successfully retrieved total price of products",
+      data: data.totalprice,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
@@ -66,7 +84,7 @@ const getMaxPriceProduct = async (req, res) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Successfully retrieved product list",
+      message: "Successfully retrieved the most expensive product",
       data: data,
     });
   } catch (error) {
@@ -84,7 +102,7 @@ const getMaxQtyProduct = async (req, res) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Successfully retrieved product list",
+      message: "Successfully retrieved products with the largest quantity",
       data: data,
     });
   } catch (error) {
@@ -170,6 +188,7 @@ module.exports = {
   getProductByCategory,
   getProductTotal,
   getProductTotalByCategory,
+  getProductTotalPrice,
   getMaxPriceProduct,
   getMaxQtyProduct,
   insertProduct,

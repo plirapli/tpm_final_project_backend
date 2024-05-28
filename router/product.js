@@ -4,6 +4,7 @@ const product = require("../controller/product");
 
 router.get("/category/:category_id", product.getProductByCategory);
 router.get("/total", product.getProductTotal);
+router.get("/total/price", product.getProductTotalPrice);
 router.get("/total/:category_id", product.getProductTotalByCategory);
 router.get("/max/price", product.getMaxPriceProduct);
 router.get("/max/qty", product.getMaxQtyProduct);
