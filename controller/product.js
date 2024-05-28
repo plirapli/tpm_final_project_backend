@@ -4,7 +4,7 @@ const getProductByCategory = async (req, res) => {
   try {
     const { category_id } = req.params;
     const command =
-      "SELECT id, title, description, is_completed, created_at FROM products WHERE category_id = ?";
+      "SELECT id, name, qty, price, created_at, updated_at FROM products WHERE category_id = ?";
     const [data] = await connection.promise().query(command, [category_id]);
 
     res.status(200).json({
@@ -30,7 +30,7 @@ const getProductTotalByCategory = async (req, res) => {
     res.status(200).json({
       status: "Success",
       message: "Successfully retrieved product list",
-      data: data,
+      data: data.totalproducts,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
@@ -48,7 +48,7 @@ const getProductTotal = async (req, res) => {
     res.status(200).json({
       status: "Success",
       message: "Successfully retrieved product list",
-      data: data,
+      data: data.totalproducts,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
@@ -97,9 +97,10 @@ const getMaxQtyProduct = async (req, res) => {
 
 const insertProduct = async (req, res) => {
   try {
-    const { name, qty, price, category_id } = req.body;
+    const { category_id } = req.params;
+    const { name, qty, price } = req.body;
 
-    if (!name || !qty || !price || !category_id) {
+    if (!name || !qty || !price) {
       const error = new Error("Field cannot be empty 😠");
       error.statusCode = 401;
       throw error;
